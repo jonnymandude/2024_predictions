@@ -59,7 +59,30 @@ resource "azurerm_linux_function_app" "prediction" {
     }
   }
 
-    depends_on = [
+  depends_on = [
     azurerm_storage_account.prediction
   ]
+}
+
+
+resource "azurerm_function_app_function" "gather_data" {
+  name            = "gather-prediction-data"
+  function_app_id = azurerm_linux_function_app.prediction.id
+  language        = "Python"
+
+  file {
+    name    = "client.py"
+    content = file("${path.module}/../app/client.py")
+  }
+
+  config_json = jsonencode({
+    "bindings" = [
+      {
+        "schedule" : "0 1 * * * *",
+        "name" : "myTimer",
+        "type" : "timerTrigger",
+        "direction" : "in"
+      }
+    ]
+  })
 }

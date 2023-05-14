@@ -2,3 +2,6 @@
 *.terraform*
 *terraform.*
 infra/terraform.tfstate
+*terraform.tfstate
+secrets/*
+*.pyc
