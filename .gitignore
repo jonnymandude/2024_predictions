@@ -1,2 +1,4 @@
 .env
 *.terraform*
+*terraform.*
+infra/terraform.tfstate
