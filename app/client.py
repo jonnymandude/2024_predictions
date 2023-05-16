@@ -45,10 +45,15 @@ class PoliticsClient(object):
                 )
         return data 
 
+    def get_political_odds(self):
+        response = self._get_request(POLITICS_URL)
+        data_points = self._parse_markets(response['markets'])
+        return data_points
 
-if name == '__main__': 
+
+if __name__ == '__main__': 
     # Establish our producer and client
-    producer = Producer(read_ccloud_config("client.properties"))
+    producer = Producer(read_ccloud_config("secrets/client.properties"))
     client = PoliticsClient()
 
     # Get the observations
@@ -56,8 +61,7 @@ if name == '__main__':
 
     # Produce all of the messages
     for datum in odds:
-        producer.produce("pres_predictions", key=datum["id"], value=datum)
-
-    producer.flush()
+        producer.produce("pres_predictions", key=str(datum["id"]), value=str(datum))
+        producer.flush()
 
 

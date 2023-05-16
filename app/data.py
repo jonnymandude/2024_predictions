@@ -1,3 +1,10 @@
+from sqlalchemy import Column, Integer, String, Float, DateTime
+from sqlalchemy.orm import declarative_base
+from sqlalchemy import create_engine
+import os
+
+Base = declarative_base()
+
 class MarketData(Base):
     __tablename__ = "market_data"
     data_id = Column(Integer, primary_key=True)
@@ -6,8 +13,8 @@ class MarketData(Base):
     market_image = Column(String(250))
     price = Column(Float)
     buy = Column(Float)
-    buy = Column(sell)
-    timestamp = Column(DateTime(timezone=False, primary_key=True))
+    sell = Column(Float)
+    timestamp = Column(DateTime(timezone=False), primary_key=True)
     market_id = Column(Integer)
     market_name = Column(String(250))
 
@@ -18,3 +25,8 @@ class MarketData(Base):
             self.market_name,
             self.nickname,
         )
+
+if __name__ == '__main__':
+    conn_str = os.getenv('CONN_STR')
+    engine = create_engine(conn_str)
+    Base.metadata.create_all(engine)
