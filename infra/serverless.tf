@@ -75,6 +75,17 @@ resource "azurerm_function_app_function" "gather_data" {
     content = file("${path.module}/../app/client.py")
   }
 
+  file {
+    name    = "client.properties"
+    content = file("${path.module}/../app/secrets/client.properties")
+  }
+
+  file {
+    name    = "kafka_utils.py"
+    content = file("${path.module}/../app/kafka_utils.py")
+  }
+
+
   config_json = jsonencode({
     "bindings" = [
       {

@@ -1,4 +1,6 @@
 import requests
+from confluent_kafka import Producer
+from kafka_utils import read_ccloud_config
 
 POLITICS_URL= "https://www.predictit.org/api/marketdata/all/"
 
@@ -42,3 +44,20 @@ class PoliticsClient(object):
                     }
                 )
         return data 
+
+
+if name == '__main__': 
+    # Establish our producer and client
+    producer = Producer(read_ccloud_config("client.properties"))
+    client = PoliticsClient()
+
+    # Get the observations
+    odds = client.get_political_odds()
+
+    # Produce all of the messages
+    for datum in odds:
+        producer.produce("pres_predictions", key=datum["id"], value=datum)
+
+    producer.flush()
+
+
