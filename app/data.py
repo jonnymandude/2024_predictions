@@ -23,7 +23,7 @@ class MarketData(Base):
         return "<MarketData(name='%s', market_name='%s', price='%s')>" % (
             self.name,
             self.market_name,
-            self.nickname,
+            self.price,
         )
 
 if __name__ == '__main__':
